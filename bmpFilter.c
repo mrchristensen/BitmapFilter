@@ -65,6 +65,16 @@ unsigned char getAverageIntensity(unsigned char blue, unsigned char green, unsig
   return 0;
 }
 
+int getRowWidthInBytes(int width) {
+  int count = 0;
+  
+  while((width * 3 + count) % 4 != 0) {
+    count++;
+  }
+
+  return (width * 3) + count;
+}
+
 void applyGrayscaleToPixel(unsigned char* pixel) {
   printf("TODO: void applyGrayscaleToPixel(unsigned char* pixel)\n");
 }
@@ -82,6 +92,9 @@ void applyFilterToRow(unsigned char* row, int width, int isGrayscale) {
 }
 
 void applyFilterToPixelArray(unsigned char* pixelArray, int width, int height, int isGrayscale) {
+  int rowWidth = getRowWidthInBytes(width);
+
+  
   printf("TODO: void applyFilterToPixelArray(unsigned char* pixelArray, int width, int height, int isGrayscale)\n");
 }
 
