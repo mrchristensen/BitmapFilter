@@ -1,0 +1,6 @@
+fileSizeInBytes = 1254
+offsetFirstBytePixelArray = 54
+width = 20
+height = 20
+pixelArray = 0x558a4eef12b6
+TODO: void applyFilterToPixelArray(unsigned char* pixelArray, int width, int height, int isGrayscale)
