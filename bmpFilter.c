@@ -74,7 +74,7 @@ unsigned char getAverageIntensity(unsigned char blue, unsigned char green, unsig
 int getRowWidthInBytes(int width) {
   int count = 0;
   
-  while((width * 3 + count) % 4 != 0) {
+  while((width * 3 + count) % 4 != 0) { //Find padding for multiple of 4
     count++;
   }
 
@@ -91,7 +91,6 @@ void applyGrayscaleToPixel(unsigned char* pixel) {
   int averagePixelValue = getAverageIntensity(*(pixel), *(pixel + 1), *(pixel + 2));
   
   setPixelToColor(pixel, pixel + 1, pixel + 2, averagePixelValue);
-  //printf("TODO: void applyGrayscaleToPixel(unsigned char* pixel)\n");
 }
 
 void applyThresholdToPixel(unsigned char* pixel) {
@@ -101,7 +100,6 @@ void applyThresholdToPixel(unsigned char* pixel) {
   else {
     setPixelToColor(pixel, pixel + 1, pixel + 2, BLACK);
   }
-  //printf("TODO: void applyThresholdToPixel(unsigned char* pixel)\n");
 }
 
 void applyFilterToPixel(unsigned char* pixel, int isGrayscale) {
@@ -111,23 +109,20 @@ void applyFilterToPixel(unsigned char* pixel, int isGrayscale) {
   else {
     applyThresholdToPixel(pixel);
   }
-  //printf("TODO: void applyFilterToPixel(unsigned char* pixel, int isGrayscale)\n");
 }
 
 void applyFilterToRow(unsigned char* row, int width, int isGrayscale) {
-  for(int i = 0; i < width; i++) {
+  for(int i = 0; i < width; i++) { //Iterate through pixels in a row
     applyFilterToPixel(row + (i * PIXEL_WIDTH), isGrayscale);
   }
-//	printf("TODO: void applyFilterToRow(unsigned char* row, int width, int isGrayscale)\n");
 }
 
 void applyFilterToPixelArray(unsigned char* pixelArray, int width, int height, int isGrayscale) {
   int rowWidth = getRowWidthInBytes(width);
 
-  for(int i = 0; i < height; i++) {
+  for(int i = 0; i < height; i++) { //Iterate through rows in an image
     applyFilterToRow(pixelArray + (i * rowWidth), width, isGrayscale);
   }
-  //printf("TODO: void applyFilterToPixelArray(unsigned char* pixelArray, int width, int height, int isGrayscale)\n");
 }
 
 void parseHeaderAndApplyFilter(unsigned char* bmpFileAsBytes, int isGrayscale) {
