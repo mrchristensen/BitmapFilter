@@ -10,6 +10,10 @@
 #define FREAD_ERROR 3
 #define MALLOC_ERROR 4
 #define FWRITE_ERROR 5
+#define THRESHOLD_VALUE 128
+#define PIXEL_WIDTH 3
+#define WHITE 0xff
+#define BLACK 0x00
 
 /**
  * Parses the command line.
@@ -60,9 +64,11 @@ void getBmpFileAsBytes(unsigned char* ptr, unsigned fileSizeInBytes, FILE* strea
   }
 }
 
-unsigned char getAverageIntensity(unsigned char blue, unsigned char green, unsigned char red) {
-  printf("TODO: unsigned char getAverageIntensity(unsigned char blue, unsigned char green, unsigned char red)\n");
-  return 0;
+unsigned char getAverageIntensity(unsigned char blue, unsigned char green, unsigned char red) {	
+  #ifdef DEBUG
+    printf("Average Intensity for %d, %d, %d is: %d\n", blue, green, red, (blue + green + red) / 3);
+  #endif
+  return (blue + green + red) / 3;
 }
 
 int getRowWidthInBytes(int width) {
@@ -75,27 +81,53 @@ int getRowWidthInBytes(int width) {
   return (width * 3) + count;
 }
 
+void setPixelToColor(unsigned char* blue, unsigned char* green, unsigned char* red, unsigned char color) {
+  *blue = color;
+  *green = color;
+  *red = color;
+}
+
 void applyGrayscaleToPixel(unsigned char* pixel) {
-  printf("TODO: void applyGrayscaleToPixel(unsigned char* pixel)\n");
+  int averagePixelValue = getAverageIntensity(*(pixel), *(pixel + 1), *(pixel + 2));
+  
+  setPixelToColor(pixel, pixel + 1, pixel + 2, averagePixelValue);
+  //printf("TODO: void applyGrayscaleToPixel(unsigned char* pixel)\n");
 }
 
 void applyThresholdToPixel(unsigned char* pixel) {
-  printf("TODO: void applyThresholdToPixel(unsigned char* pixel)\n");
+  if(getAverageIntensity(*(pixel), *(pixel + 1), *(pixel + 2)) >= THRESHOLD_VALUE){
+    setPixelToColor(pixel, pixel + 1, pixel + 2, WHITE);
+  }
+  else {
+    setPixelToColor(pixel, pixel + 1, pixel + 2, BLACK);
+  }
+  //printf("TODO: void applyThresholdToPixel(unsigned char* pixel)\n");
 }
 
 void applyFilterToPixel(unsigned char* pixel, int isGrayscale) {
-  printf("TODO: void applyFilterToPixel(unsigned char* pixel, int isGrayscale)\n");
+  if(isGrayscale) {
+    applyGrayscaleToPixel(pixel);
+  }
+  else {
+    applyThresholdToPixel(pixel);
+  }
+  //printf("TODO: void applyFilterToPixel(unsigned char* pixel, int isGrayscale)\n");
 }
 
 void applyFilterToRow(unsigned char* row, int width, int isGrayscale) {
-  printf("TODO: void applyFilterToRow(unsigned char* row, int width, int isGrayscale)\n");
+  for(int i = 0; i < width; i++) {
+    applyFilterToPixel(row + (i * PIXEL_WIDTH), isGrayscale);
+  }
+//	printf("TODO: void applyFilterToRow(unsigned char* row, int width, int isGrayscale)\n");
 }
 
 void applyFilterToPixelArray(unsigned char* pixelArray, int width, int height, int isGrayscale) {
   int rowWidth = getRowWidthInBytes(width);
 
-  
-  printf("TODO: void applyFilterToPixelArray(unsigned char* pixelArray, int width, int height, int isGrayscale)\n");
+  for(int i = 0; i < height; i++) {
+    applyFilterToRow(pixelArray + (i * rowWidth), width, isGrayscale);
+  }
+  //printf("TODO: void applyFilterToPixelArray(unsigned char* pixelArray, int width, int height, int isGrayscale)\n");
 }
 
 void parseHeaderAndApplyFilter(unsigned char* bmpFileAsBytes, int isGrayscale) {
