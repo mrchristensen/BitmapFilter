@@ -9,6 +9,17 @@
   * Define variables for the C pre-processor and use pre-preprocessor directives to conditionally include code at compilation
   * Practice basic debugging in `gdb`
 
+# Results
+
+#### Original Image
+![](images/orig-horses.bmp)
+
+#### Grayscale
+![](images/grayscale-horses-mine.bmp)
+
+#### Threshold
+![](images/threshold-horses-mine.bmp)
+
 # Project Summary
 
 The goal of this lab is to write a program that reads a bitmap (`bmp`) file from standard in (`stdin`), apply a threshold or grayscale filter to that image, and then write the filtered image to standard out (`stdout`).  Here are two usage examples.
